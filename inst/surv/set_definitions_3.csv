@@ -1,0 +1,6 @@
+type,treatment,set_name,condition,time_subtract
+PFS,fake_treatment,all,TRUE,
+PFS,not_real,all,TRUE,
+OS,fake_treatment,time.gt.100,time > 100,100
+OS,not_real,time.gt.100,time > 100,100
+OS,not_real,time.gt.100,time > 100 & biomarker == TRUE,100

@@ -1,0 +1,42 @@
+Package: heemodFits
+Title: Using Survival Fits with Heemod
+Version: 0.1.0
+Authors@R: c(
+    person("Matthew", "Wiener", role = c("aut", "cre"),
+    email = "matthew.c.wiener@gmail.com")
+    )
+Description: Organize the fitting and use of survival data in heemod models.
+Depends: R (>= 3.2.2)
+Imports:
+    dplyr,
+    flexsurv,
+    ggplot2 (>= 2.2.0),
+    graphics,
+    grDevices,
+    heemod,
+    lazyeval,
+    lpSolve,
+    memoise,
+    mvnfast,
+    plyr,
+    pryr,
+    readxl,
+    rmarkdown,
+    stats,
+    survival,
+    survminer,
+    testthat,
+    tibble,
+    tidyr,
+    tools,
+    utils,
+    XLConnect
+License: MIT
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
+Suggests:
+    knitr
+URL: 
+BugReports: 
+Roxygen: list(markdown = TRUE)
