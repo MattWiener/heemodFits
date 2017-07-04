@@ -243,7 +243,7 @@ survival_from_data <-
                      new_fits <-
                        these_surv_fits %>%
                        dplyr::rowwise() %>%
-                       dplyr::do_(fit = ~ apply_shift(dist = .$fit,
+                       dplyr::do_(fit = ~ heemod::apply_shift(dist = .$fit,
                                                       shift = .$time_subtract)) %>%
                        dplyr::ungroup()
                      

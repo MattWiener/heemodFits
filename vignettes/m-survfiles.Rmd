@@ -13,6 +13,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 library(heemod)
+library(heemodFits)
 library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 library(flexsurv)
@@ -235,14 +236,14 @@ The same specification file that was used for `survival_fits_from_tabular` can b
 
 Here is the use_fits element of this file:
 ```{r}
-ref <- heemod:::read_file(file.path(base_dir, spec_file))
+ref <- heemodFits:::read_file(file.path(base_dir, spec_file))
 use_fits_file <- file.path(base_dir, ref[ref$data == "use_fits", "file"])
-use_fits <- heemod:::read_file(use_fits_file)
+use_fits <- heemodFits:::read_file(use_fits_file)
 use_fits
 ```
 
 ```{r}
-surv_example <- run_model_tabular(base_dir, spec_file,
+surv_example <- heemod::run_model_tabular(base_dir, spec_file,
                                   run_psa = FALSE, run_demo = FALSE,
                                   save = FALSE, overwrite= FALSE)
 ```
