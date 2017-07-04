@@ -1,0 +1,152 @@
+---
+title: "Survival fit report"
+author: "Economic and Data Sciences"
+date: '`r Sys.Date()`'
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 4
+
+params:
+  fit_tibble: list()
+  extra_args: list()
+
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+fit_tibble <- params$fit_tibble
+library(heemod)
+library(survminer)
+extra_args <- params$extra_args
+AIC <- sapply(fit_tibble$fit, heemod:::get_component, "AIC")
+BIC <- sapply(fit_tibble$fit, heemod:::get_component, "BIC")
+
+AIC[sapply(AIC, is.null)] <- NA
+BIC[sapply(BIC, is.null)] <- NA
+
+fit_tibble$AIC <- unlist(AIC)
+fit_tibble$BIC <- unlist(BIC)
+library(heemod)
+```
+
+```{r set_up_combos, include = FALSE}
+## first get all the combinations
+combos <- fit_tibble[, c("type", "set_name", "treatment")]
+combos <- combos[!duplicated(combos), ]
+
+
+ combos <-
+   combos %>% 
+   dplyr::mutate(title = paste(.$type, "for subset", 
+                                 .$set_name, "of treatment", 
+                                 .$treatment)
+                )
+```
+
+```{r make_plots, include=FALSE}
+all_plots <- 
+  combos %>% dplyr::rowwise() %>% 
+    dplyr::do(plot_set = do.call(plot_fit_tibble,
+                        c(list(fit_tibble = fit_tibble,
+                            treatment = .$treatment,
+                             set_name = .$set_name,
+                             type = .$type,
+                            B_ci = 0),
+                          extra_args
+                        )
+                      )
+              )
+combos <- dplyr::bind_cols(combos, all_plots)
+```
+
+```{r make_aic_bic, include = FALSE}
+AIC_BIC <- 
+  combos %>% dplyr::rowwise() %>%
+  dplyr::do(AIC_BIC = {dplyr::filter_(fit_tibble,
+                                     ~treatment == .$treatment,
+                                     ~set_name == .$set_name,
+                                     ~type == .$type,
+                                     ~dist != "km") %>%
+  dplyr::select_(~dist, ~AIC, ~BIC)}
+  )
+
+combos <- dplyr::bind_cols(combos, AIC_BIC)
+```
+
+```{r cloglog_plots, include = FALSE, warning = FALSE}
+cloglog_combos <- fit_tibble[, c("type", "set_name")]
+cloglog_combos <- cloglog_combos[!duplicated(cloglog_combos), ]
+ cloglog_combos <-
+   cloglog_combos %>% 
+   dplyr::mutate(title = paste(.$type, "for subset", 
+                                 .$set_name)
+   )
+cloglog_plots <- 
+  cloglog_combos %>% dplyr::rowwise() %>% 
+    dplyr::do(plot_set = do.call(plot_cloglog_fit_tibble,
+                        c(list(fit_tibble = fit_tibble,
+                             set_name = .$set_name,
+                             treatments = NULL, 
+                             type = .$type,
+                          extra_args
+                        )
+                      )
+              )
+    )
+cloglog_combos <- dplyr::bind_cols(cloglog_combos,
+                                   cloglog_plots)
+
+
+```
+
+```{r print_plots, echo = FALSE, results = 'asis', include = TRUE, warning = FALSE}
+panderOptions('knitr.auto.asis', FALSE)
+for(i in seq(along = cloglog_combos$plot_set)){
+
+  
+  cat("\n## ", cloglog_combos$plot_set[[i]]$cloglog$labels$title, "\n\n")
+  cat("### Kaplan-Meier curves", "\n\n")
+  print(cloglog_combos$plot_set[[i]]$km)
+  cat("\n\n")
+  cat("### log cumulative log hazard plot", "\n\n")
+  print(cloglog_combos$plot_set[[i]]$cloglog)
+  cat("\n\n")
+  cat("### proportional hazards model summary", "\n\n")
+  cat("##### **statistical test**", "\n\n")
+  pander(cloglog_combos$plot_set[[i]]$cox_fit)
+  cat("\n\n")
+  cat("##### **Schoenfeld residual plot**", "\n\n")
+  print(cloglog_combos$plot_set[[i]]$cox_resid)
+  cat("\n\n")
+  
+    cat("### parametric fits", "\n\n")
+    these_combos <- 
+    combos %>% dplyr::filter_(lazyeval::interp(~type == var, 
+                                               var = cloglog_combos$type[[i]]),
+                              lazyeval::interp(~set_name == var,
+                                               var = cloglog_combos$set_name[[i]])
+                              )
+  
+    
+   for(j in seq(along = these_combos$plot_set)){
+   
+   cat("####", these_combos$treatment[[j]], " ", "\n\n")
+   cat("\n##### AIC and BIC statistics \n")
+   max_digits <- 
+     ceiling(max(log10(these_combos$AIC_BIC[[j]][, c("AIC", "BIC")])))
+   pander::pandoc.table(data.frame(these_combos$AIC_BIC[[j]]), 
+                        digits = max_digits + 2)
+   cat("\n")
+   cat("\n##### survival and cumulative hazard plots", "\n\n")
+   print(these_combos$plot_set[[j]]$survival)
+   cat("\n\n")
+   print(these_combos$plot_set[[j]]$cumhaz)
+   cat("\n\n")
+ }
+  cat("-----")
+  cat("\n\n")
+}
+```
