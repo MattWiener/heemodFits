@@ -107,12 +107,8 @@ f_find_best_piecewise_survival_models <-
 	unique_groups <- as.character(unique(survdata[,treatment_col_name]))
 	groups_list <- c(list(unique_groups))
 	names(groups_list) <- c("all")
-	attachNamespace("flexsurv")
-#	if(fit_indiv_groups)
-#	{
-#		groups_list <- c(as.list(unique_groups), list(unique_groups))
-#		names(groups_list) <- c(unique_groups, "all")
-#	}
+	if(!any(grepl("package:flexsurv", search())))
+	  attachNamespace("flexsurv")
   groups_list <- as.list(unique_groups)
   names(groups_list) <- unique_groups
   

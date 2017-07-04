@@ -1,6 +1,7 @@
 library(testthat)
 library(heemod)
 library(heemodFits)
+library(flexsurv)
 
 ## the Sys.setenv fixes a problem running tests
 ##   with parallel processing; related to

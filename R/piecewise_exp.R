@@ -14,11 +14,11 @@ H_piecewise_exp <- function(t, pe_def, log = FALSE){
   ## because start itself will get turned into a factor
   pe_def$start2 <- pe_def$start 
 
-  cum_until_last <- look_up(pe_def, start = t, 
+  cum_until_last <- heemod::look_up(pe_def, start = t, 
                             bin = "start", value = "cum_hazard")
-  hazard_after_last <- look_up(pe_def, start = t,
+  hazard_after_last <- heemod::look_up(pe_def, start = t,
                                bin = "start", value = "hazard")
-  time_after_last <- t - look_up(pe_def, start = t,
+  time_after_last <- t - heemod::look_up(pe_def, start = t,
                                  bin = "start", value = "start2")
   res <- cum_until_last + time_after_last * hazard_after_last
 
@@ -35,7 +35,7 @@ h_piecewise_exp <- function(t, pe_def, log = FALSE){
                            hazard = pe_def[use_nrow + 1:use_nrow])
      }
    # print(pe_def)
-    res <- look_up(pe_def, start = t, 
+    res <- heemod::look_up(pe_def, start = t, 
                  bin = "start", value = "hazard")
   if(log == TRUE) res <- log(res)
   return(res)

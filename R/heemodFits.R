@@ -5,6 +5,7 @@
 #'   
 #'   
 #' @importFrom heemod compute_surv
+#' @importFrom heemod look_up
 #'    
 #' @importFrom dplyr filter_
 #' @importFrom dplyr mutate_
@@ -24,6 +25,7 @@
 #' 
 #' @importFrom heemod discount
 #' @importFrom heemod compute_surv
+#' @importFrom heemod look_up
 #' 
 #' @importFrom plyr ldply
 #' @importFrom plyr ddply

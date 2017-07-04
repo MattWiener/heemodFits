@@ -47,8 +47,8 @@ used in survival fitting, different treatments, and different subsets.
 Create a partitioned survival model object from tabular input
 }
 \examples{
-fit_tibble <- partitioned_survival_from_tabular(system.file("tabular/surv",
-                                                            package = "heemod"), 
+fit_tibble <- partitioned_survival_from_tabular(system.file("surv",
+                                                            package = "heemodFits"), 
                                   "example_oncSpecs.csv", 
                                   c("ProgressionFree", "Progressive", 
                                   "Terminal", "Death"), 

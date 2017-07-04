@@ -7,7 +7,7 @@ H_piecewise_multi <- function(t, pieces_def, dists, log = FALSE){
     pieces_def <- convert_vector_to_struct(pieces_def, dists)
     }
   pieces_def$start2 <- pieces_def$start
-  start_times <- look_up(pieces_def, start = t, #pieces_def$start,
+  start_times <- heemod::look_up(pieces_def, start = t, #pieces_def$start,
                                     bin = "start", value = "start2")
   indices <- match(start_times, pieces_def$start)
   pieces_def$Haz_fn <- paste0("H", pieces_def$dist_name)
@@ -62,7 +62,7 @@ h_piecewise_multi <- function(t, pieces_def, dists, log = FALSE){
        pieces_def <- convert_vector_to_struct(pieces_def, dists)
        }
   pieces_def$start2 <- pieces_def$start
-  start_times <- look_up(pieces_def, start = t,
+  start_times <- heemod::look_up(pieces_def, start = t,
                          bin = "start", value = "start2")
 
   indices <- match(start_times, pieces_def$start)
@@ -214,7 +214,7 @@ get_multi_dist_inits <- function(these_bp, dists, t){
   
   
 
-#' Create a random number generator for a piecewise exponential distribution
+#' Create a random number generator for a piecewise  distribution
 #'
 #' @param piecewise_def a data frame with columns \code{start} and
 #'   \code{dist_name}, and additional columns for parameters of distributions.
@@ -274,7 +274,6 @@ r_piecewise_builder <-
     
     cum_hazard <- cumsum(c(cum_hazard_at_start, last_haz))
     time <- c(piecewise_def$start, last_time)
-    browser()
     ## hazards are not constant, so can't use linear interpolation,
     ##   when distribution is not exponential.
     this_fun <-  stats::approxfun(x = -cum_hazard, 

@@ -21,8 +21,8 @@ allowed_fit_distributions <- c("exp", "weibull", "lnorm", "llogis",
 #'   There are columns to distinguish the different distributions used
 #'   used in survival fitting, different treatments, and different subsets.
 #' @examples 
-#' fit_tibble <- partitioned_survival_from_tabular(system.file("tabular/surv",
-#'                                                             package = "heemod"), 
+#' fit_tibble <- partitioned_survival_from_tabular(system.file("surv",
+#'                                                             package = "heemodFits"), 
 #'                                   "example_oncSpecs.csv", 
 #'                                   c("ProgressionFree", "Progressive", 
 #'                                   "Terminal", "Death"), 
@@ -659,6 +659,14 @@ add_m2LL <- function(surv_fits)
 #' @export
 #'
 #' @examples
+#' fit_tibble <- survival_fits_from_tabular(system.file("surv",
+#'                                                             package = "heemodFits"), 
+#'                                   "example_oncSpecs.csv", 
+#'                                   c("ProgressionFree", "Progressive", 
+#'                                   "Terminal", "Death"), 
+#'                                   save_fits = FALSE,
+#'                                   just_load = FALSE)
+#' fit_tibble <- extract_surv_fit_metrics(fit_tibble)
 extract_surv_fit_metrics <-
   function(fit_tib, metric = c("AIC", "BIC", "m2LL")) {
     ## metric <- match.arg(metric)

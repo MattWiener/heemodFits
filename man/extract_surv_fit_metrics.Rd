@@ -18,3 +18,13 @@ a tibble with the added columns
 \description{
 Add fit metrics to a fit tibble
 }
+\examples{
+fit_tibble <- survival_fits_from_tabular(system.file("surv",
+                                                            package = "heemodFits"), 
+                                  "example_oncSpecs.csv", 
+                                  c("ProgressionFree", "Progressive", 
+                                  "Terminal", "Death"), 
+                                  save_fits = FALSE,
+                                  just_load = FALSE)
+fit_tibble <- extract_surv_fit_metrics(fit_tibble)
+}
