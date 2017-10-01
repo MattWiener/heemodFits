@@ -332,7 +332,6 @@ summary_helper <- function(fit_holder, type, ...){
 #' @return a `ggplot2` plot object
 #' @export
 #'
-#' @examples
 plot_fit_data <- function(data_to_plot, 
                           plot_type = c("survival", "cumulative hazard",
                                         "log cumulative hazard"),
@@ -486,7 +485,6 @@ extract_fits <- function(x) {
 #'   for cumulative hazard
 #' @export
 #'
-#' @examples
 plot_fit_tibble <-
   function(fit_tibble, treatment, set_name, type, 
            set_for_km = "all", B_ci = 100, 

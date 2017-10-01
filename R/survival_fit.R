@@ -142,7 +142,7 @@ survival_from_data <-
       return(heemod::load_surv_models(location, survival_specs))
     }
     else{
-      ## going to check whether we have an absolute directory
+      ## check whether we have an absolute directory
       ##   for data directory, or relative.
       loadNamespace("flexsurv")
       is_absolute <-
@@ -530,6 +530,16 @@ f_fit_survival_models <-
           this_fit <- survminer::surv_fit(this_formula,
                                           data = this_data)
         }
+        # if(conditions[i, "dist"] == "piecewise-exp-2"){
+        #   this_fit <- find_best_piecewise_survival_models(num_pieces = 2,
+        #                                                   dists = list(matrix("exp", nrow = 1, ncol = 2),
+        #                                                                survdata = this_data,
+        #                                                                time_col_name = time_col_name,
+        #                                                                censor_col_name = censor_col_name,
+        #                                                                treatment_col_name = treatment_col_name,
+        #                                                                fit_indiv_groups = FALSE,
+        #                                                                num_cand = )
+        # }
         else{
           this_fit <- try(flexsurv::flexsurvreg(this_formula,
                                                 data = this_data,
@@ -1017,3 +1027,35 @@ check_survival_specs <-
     }
     surv_specs
   }
+
+
+
+#' Load a set of survival fits
+#'
+#' @param location base directory
+#' @param survival_specs information about fits
+#' @param use_envir an environment
+#'
+#' @return A list with two elements:  \itemize{
+#'    \item{`best_models`, 
+#'    a list with the fits for each data file passed in; and} 
+#'    \item{`envir`, 
+#'    an environment containing the models so they can be referenced to 
+#'    get probabilities.}
+#'    }
+#' @export
+#'
+load_surv_models <- function(location, survival_specs, use_envir){
+  fit_files <- file.path(location,
+                         survival_specs$fit_directory,
+                         survival_specs$fit_file)
+  for(index in seq(along = fit_files)){
+    this_fit_file <- fit_files[index]
+    this_fit_name <- survival_specs$fit_name[index]
+    load(paste(this_fit_file, ".RData", sep = ""))
+  }
+  surv_models <- mget(survival_specs$fit_name)
+  names(surv_models) <- survival_specs$fit_name
+  list(do.call("rbind", mget(survival_specs$fit_name)),
+       env = use_envir)
+}

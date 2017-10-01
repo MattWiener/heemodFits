@@ -263,7 +263,7 @@ mixed_use_fits
 ```
 
 ```{r fig.width = 8, fig.height = 5, run_mixed_dist}
-surv_example_mixed <- run_model_tabular(base_dir, spec_file,
+surv_example_mixed <- heemod::run_model_tabular(base_dir, spec_file,
                                   run_psa = FALSE, run_demo = FALSE,
                                   save = FALSE, overwrite= FALSE)
 plot(surv_example_mixed$model_runs)
@@ -283,7 +283,7 @@ join_use_fits
 In this case, we see the less regular changes of the Kaplan-Meier curve until
 time 50, followed by the more regular changes of the fit model.
 ```{r fig.width = 8, fig.height = 5, run_joined_dist}
-surv_example_mixed <- run_model_tabular(base_dir, spec_file,
+surv_example_mixed <- heemod::run_model_tabular(base_dir, spec_file,
                                   run_psa = FALSE, run_demo = FALSE,
                                   save = FALSE, overwrite= FALSE)
 plot(surv_example_mixed$model_runs)
