@@ -162,6 +162,15 @@ get_state_names.part_surv <- function(x) {
   x$state_names
 }
 
+
+#' Title
+#'
+#' @param x partitioned survival (`part_surv`) objecct
+#' @param parameters an `eval_parameters` object.
+#'
+#' @return an `eval_part_surv` object.
+#' @export
+#'
 eval_transition.part_surv <- function(x, parameters) {
   
   time_ <- c(0, parameters$markov_cycle)
@@ -199,8 +208,23 @@ eval_transition.part_surv <- function(x, parameters) {
     class = "eval_part_surv")
 }
 
+
+#' Compute Count of Individual in Each State per Cycle
+#' 
+#' 
+#' @param x An `eval_part_surv` object.
+#' @param init numeric vector, same length as number of 
+#'   model states. Number of individuals in each model state
+#'   at the beginning.
+#' @param inflow numeric vector, similar to `init`.
+#'   Number of new individuals in each state per cycle.
+#' @param ... additional arguments (currently ignored).
+#' @return A `cycle_counts` object.
+#'   
+#' @export
+
 compute_counts.eval_part_surv <- function(x, init,
-                                          inflow) {
+                                          inflow, ...) {
   
   stopifnot(
     length(x$state_names) %in% 3:4,
@@ -509,25 +533,36 @@ join_fits_to_def <- function(surv_def, fit_tibble) {
 #' @param tm_info specification of a transition object; either a 
 #'   partial survival object (defined in this package) or a matrix
 #'   (defined in  package `heemod`)
-#' @param state_names names of the states the model is to be used with
+#' @param state_model_names names of the states the model is to be used with
 #' @param ... additional arguments; for partitioned survival objects,
 #'   reference file and environment
 #'
 #' @return a partial survival object
 #' @export
 #'
-transform_tm_info.part_surv_tm_info <- function(tm_info, state_names, ...){
+transform_tm_info.part_surv_tm_info <- function(tm_info, state_model_names, ...){
     extra_args <- list(...)
     ref <- extra_args$ref
-    df_env <- extra_args$df_env
     use_fits_file <- ref[ref$data == "use_fits", "full_file"]
-    use_fits <- heemod:::read_file(use_fits_file)
-    tm_info <- construct_part_surv_tib(use_fits, ref, env = df_env,
-                                       state_names = state_names)
+    use_fits <- read_file(use_fits_file)
+    tm_info <- construct_part_surv_tib(use_fits, ref, env = extra_args$df_env,
+                                       state_names = extra_args$state_names)
 
-    heemod::test_model_name_match(names(state_names), unique(tm_info$.strategy))
+    heemod::test_model_name_match(state_model_names, unique(tm_info$.strategy))
       
     tm_info <- 
-      dplyr::filter_(tm_info, ~ .strategy %in% names(state_info))
+      dplyr::filter_(tm_info, ~ .strategy %in% state_model_names)
     return(tm_info)  
+}
+
+#' get_state_names method for part_surv objects
+#'
+#' @param x partitioned survival (`part_surv`) object
+#' @param ... additional arguments (ignored)
+#'
+#' @return state names associated with the object
+#' @export
+#'
+get_state_names.part_surv <- function(x, ...){
+  x$state_names
 }

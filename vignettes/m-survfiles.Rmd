@@ -52,7 +52,7 @@ either progression-free survival (PFS), overall survival (OS), or time on treatm
 ```{r surv-info}
 surv_inf_file_name <- "survival_info.csv"
 full_path <- file.path(base_dir, surv_inf_file_name)
-surv_info <- heemod:::read_file(full_path)
+surv_info <- heemodFits:::read_file(full_path)
 print(surv_info)
 ```
 
@@ -103,7 +103,7 @@ Below is an example:
 ```{r subset-file}
 subset_def_file_name <- "set_definitions.csv"
 full_path <- file.path(base_dir, "survival_data", subset_def_file_name)
-subset_info <- heemod:::read_file(full_path)
+subset_info <- heemodFits:::read_file(full_path)
 print(subset_info)
 ```
 The file must contain three columns: treatment, set_name, and condition.
@@ -143,7 +143,7 @@ be fit for both PFS and OS.
 ```{r subset-file-pfs-os}
 subset_def_file_name <- "set_def_pfs_os.csv"
 full_path <- file.path(base_dir, "survival_data", subset_def_file_name)
-subset_info <- heemod:::read_file(full_path)
+subset_info <- heemodFits:::read_file(full_path)
 print(subset_info)
 ```
 
@@ -222,7 +222,7 @@ order by `until`.)   Here we don't require it.
 If we define `use_fits` as
 ```{r define_fits}
 use_fits_file <- file.path(base_dir, "use_fits_example0.csv")
-use_fits <- heemod:::read_file(use_fits_file)
+use_fits <- heemodFits:::read_file(use_fits_file)
 use_fits
 ```
 
@@ -256,9 +256,9 @@ We can also mix explicit survival distribution definitions with fits,
 as shown below.
 ```{r}
 spec_file <- "example_oncSpecs_mixed.csv"
-ref <- heemod:::read_file(file.path(base_dir, spec_file))
+ref <- heemodFits:::read_file(file.path(base_dir, spec_file))
 mixed_use_fits_file <- file.path(base_dir, ref[ref$data == "use_fits", "file"])
-mixed_use_fits <- heemod:::read_file(mixed_use_fits_file)
+mixed_use_fits <- heemodFits:::read_file(mixed_use_fits_file)
 mixed_use_fits
 ```
 
@@ -275,9 +275,9 @@ and then switch over to a fit, as shown below.
 
 ```{r}
 spec_file <- "example_oncSpecs_nomatrix_join.csv"
-ref <- heemod:::read_file(file.path(base_dir, spec_file))
+ref <- heemodFits:::read_file(file.path(base_dir, spec_file))
 join_use_fits_file <- file.path(base_dir, ref[ref$data == "use_fits", "file"])
-join_use_fits <- heemod:::read_file(join_use_fits_file)
+join_use_fits <- heemodFits:::read_file(join_use_fits_file)
 join_use_fits
 ```
 In this case, we see the less regular changes of the Kaplan-Meier curve until

@@ -6,7 +6,6 @@
 #' 
 #' @return A `data.frame`.
 #'   
-#' @keywords internal
 read_file <- function(file_name) {
   
   have_xls <- is_xls(file_name)

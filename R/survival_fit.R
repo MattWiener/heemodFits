@@ -70,7 +70,7 @@ partitioned_survival_from_tabular <-
   
   surv_inputs <- survival_fits_from_tabular(base_dir, ref_file, 
                              save_fits, just_load)
-  heemod::part_survs_from_surv_inputs(surv_inputs, state_names)
+  part_survs_from_surv_inputs(surv_inputs, state_names)
 }
 
 #' @export
@@ -81,7 +81,7 @@ partitioned_survival_from_ref_struc <- function(ref,
                                               just_load = FALSE) {
   surv_inputs <- survival_fits_from_ref_struc(ref, 
                                             save_fits, just_load)
-  heemod::part_survs_from_surv_inputs(surv_inputs[[1]], state_names)
+  part_survs_from_surv_inputs(surv_inputs[[1]], state_names)
 }
 
 #' Title Get survival analysis curves from data
@@ -139,7 +139,7 @@ survival_from_data <-
     survival_specs <- check_survival_specs(survival_specs)
     
     if (just_load) {
-      return(heemod::load_surv_models(location, survival_specs))
+      return(load_surv_models(location, survival_specs))
     }
     else{
       ## check whether we have an absolute directory

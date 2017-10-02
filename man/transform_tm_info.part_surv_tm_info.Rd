@@ -4,14 +4,14 @@
 \alias{transform_tm_info.part_surv_tm_info}
 \title{Title}
 \usage{
-transform_tm_info.part_surv_tm_info(tm_info, state_names, ...)
+transform_tm_info.part_surv_tm_info(tm_info, state_model_names, ...)
 }
 \arguments{
 \item{tm_info}{specification of a transition object; either a
 partial survival object (defined in this package) or a matrix
 (defined in  package \code{heemod})}
 
-\item{state_names}{names of the states the model is to be used with}
+\item{state_model_names}{names of the states the model is to be used with}
 
 \item{...}{additional arguments; for partitioned survival objects,
 reference file and environment}
